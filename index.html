@@ -214,6 +214,7 @@ let allData={},goals={},passwords={},coachPw='',detailStudent=null;
 let studentView='calendar';
 let rankRange='week';
 let showSettings=false;
+let nudgeSeen=false;
 
 function todayStr(){return`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
 function getDays(y,m){return new Date(y,m+1,0).getDate();}
@@ -410,6 +411,7 @@ function buildStudent(){
     </div>
     ${tabs}${body}
     ${showSettings?buildSettingsModal():''}
+    ${buildNudge()}
   `;
 }
 
@@ -417,6 +419,44 @@ function setView(v){studentView=v;render();}
 function setRankRange(r){rankRange=r;render();}
 function openSettings(){showSettings=true;render();}
 function closeSettings(){showSettings=false;render();}
+
+// ── 未入力おしらせ ────────────────────────────────────────
+function daysSinceLast(name){
+  const pre=name+'/';
+  let last='';
+  for(const k of Object.keys(allData)){
+    if(k.indexOf(pre)!==0)continue;
+    const d=k.slice(pre.length);
+    const v=allData[k]||{};
+    let t=0;for(const c of CATS)t+=Number(v[c.key]||0);
+    if(t>0&&d>last)last=d;
+  }
+  if(!last)return null;
+  const p=last.split('-').map(Number);
+  const a=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const b=new Date(p[0],p[1]-1,p[2]);
+  return{last:last,days:Math.round((a-b)/86400000)};
+}
+function buildNudge(){
+  if(nudgeSeen||modalDay||showGoalModal||showSettings)return'';
+  const r=daysSinceLast(myName);
+  if(!r||r.days<2)return'';
+  const p=r.last.split('-');
+  return`<div class="overlay" onclick="if(event.target===this)closeNudge()">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">⏰ ${r.days}日間、記録がありません</div>
+      <div class="modal-sub">最後の記録は ${parseInt(p[1])}月${parseInt(p[2])}日です。<br>
+        短い時間でも、記録が途切れないほうが続きます。やらなかった日は0分でもOKです。</div>
+      <div class="mactions">
+        <button class="btn-cancel" onclick="closeNudge()">あとで</button>
+        <button class="btn-save" onclick="nudgeToday()">今日の記録をつける</button>
+      </div>
+    </div>
+  </div>`;
+}
+function closeNudge(){nudgeSeen=true;render();}
+function nudgeToday(){nudgeSeen=true;openDay(todayStr());}
 
 function buildSettingsModal(){
   return`<div class="overlay" onclick="if(event.target===this)closeSettings()">
