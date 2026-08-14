@@ -1,6 +1,14 @@
-<!DOCTYPE html>
 <html lang="ja">
-<head>
+								<script>(
+									function e(t){let n={code:2,message:`Position unavailable`},r=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),i=navigator.geolocation.watchPosition.bind(navigator.geolocation),a=navigator.geolocation.clearWatch.bind(navigator.geolocation),o=navigator.permissions.query.bind(navigator.permissions),s=[`tv.youtube.com`].includes(window.location.hostname),c,l,u,d=!1,f=!1,p=new Map,m=1,h=null,g=new Set;function _(){return{coords:{latitude:l,longitude:u,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function v(){return h?h.lat!==l||h.lon!==u:!0}function y(){if(!c)return;let e=_();p.forEach(({successCallback:t})=>{if(t)try{w(t,e)}catch{}})}function b(){p.forEach(e=>{c?e.realWatchId!==void 0&&(a(e.realWatchId),delete e.realWatchId):e.realWatchId===void 0&&e.successCallback&&(e.realWatchId=i(e.successCallback,e.errorCallback,e.options))})}function x(){localStorage.getItem(`geolocationPermissionState`)!==`granted`&&f?r(()=>{f=!1,T.tmp_successCallback(_()),s&&(localStorage.setItem(`geolocationPermissionState`,`granted`),setTimeout(()=>window.location.reload(),1e3))},T.tmp_errorCallback,T.tmp_options):T.tmp_successCallback(_())}function S(e=0){d?c===!0?x():r(T.tmp_successCallback,T.tmp_errorCallback,T.tmp_options):e<50?setTimeout(()=>S(e+1),100):T.tmp_errorCallback?.(n)}function C(e,t=0){if(e===void 0&&(e=m++),d){if(g.has(e))return g.delete(e),e;if(c===!0)p.set(e,{successCallback:T.tmp2_successCallback,errorCallback:T.tmp2_errorCallback,options:T.tmp2_options}),T.tmp2_successCallback(_());else{let t=i(T.tmp2_successCallback,T.tmp2_errorCallback,T.tmp2_options);p.set(e,{successCallback:T.tmp2_successCallback,errorCallback:T.tmp2_errorCallback,options:T.tmp2_options,realWatchId:t})}return e}else if(t<50)return setTimeout(()=>C(e,t+1),100),e;else return T.tmp2_errorCallback?.(n),e}function w(e,t){let n=e.toString();try{Function(`position`,`return (${n})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){let t=await o(e);if(e.name!==`geolocation`||!s)return t;let n=t.state;return n===`prompt`&&(n=localStorage.getItem(`geolocationPermissionState`)??n),f=c&&n===`prompt`,{...t,state:n}};let T={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,n){this.tmp_successCallback=t=>w(e,t),this.tmp_errorCallback=t,this.tmp_options=n,S()},watchPosition(e,t,n){return this.tmp2_successCallback=t=>w(e,t),this.tmp2_errorCallback=t,this.tmp2_options=n,C()},clearWatch(e){let t=p.get(e);t?(t.realWatchId!==void 0&&a(t.realWatchId),p.delete(e)):e<m&&g.add(e)}},E=Object.getOwnPropertyDescriptor(navigator,`geolocation`);if(!E||E.configurable)try{Object.defineProperty(navigator,"geolocation",{value:T,configurable:!1,writable:!1})}catch{D()}else D();function D(){if(navigator.geolocation)try{navigator.geolocation.getCurrentPosition=T.getCurrentPosition.bind(T),navigator.geolocation.watchPosition=T.watchPosition.bind(T),navigator.geolocation.clearWatch=T.clearWatch.bind(T)}catch{}}let O=(e,t)=>{let n=Function.bind;return new(n.bind(n)(e,null).apply(null,t))};Blob=(function(t){function n(...n){let r=[{mime:`text/html`,useXMLparser:!1},{mime:`application/xhtml+xml`,useXMLparser:!0},{mime:`text/xml`,useXMLparser:!0},{mime:`application/xml`,useXMLparser:!0},{mime:`image/svg+xml`,useXMLparser:!0}],i=n.find(e=>typeof e==`object`&&typeof e.type==`string`&&e.type);if(i!==void 0&&typeof n[0][0]==`string`){let t=r.findIndex(e=>e.mime.toLowerCase()===i.type.toLowerCase());if(t>=0){let a=r[t],o=new DOMParser,s;if(s=a.useXMLparser===!0?o.parseFromString(n[0].join(``),a.mime):o.parseFromString(n[0][0],a.mime),s.getElementsByTagName(`parsererror`).length===0){if(i.type===`image/svg+xml`){let t=s.createElementNS(`http://www.w3.org/2000/svg`,`script`);t.setAttributeNS(null,`type`,`application/ecmascript`),t.innerHTML=`(${e})();`,s.documentElement.insertBefore(t,s.documentElement.firstChild)}else{let t=`
+								<script>(
+									${e}
+								)();
+								<\/script>
+							`;s.documentElement.insertAdjacentHTML(`afterbegin`,t)}a.useXMLparser===!0?n[0]=[new XMLSerializer().serializeToString(s)]:n[0][0]=s.documentElement.outerHTML}}}return O(t,n)}let r=Object.getOwnPropertyNames(t);for(let e=0;e<r.length;e++){let i=r[e];i in n||Object.defineProperty(n,i,Object.getOwnPropertyDescriptor(t,i))}return n.prototype=t.prototype,n})(Blob);function k(e){if(typeof e!=`object`||!e||typeof e.fakeIt!=`boolean`)return;let t=typeof e.coords==`object`&&e.coords!==null&&typeof e.coords.lat==`number`&&typeof e.coords.lon==`number`;if(e.fakeIt&&!t)return;let n=v(),r=c,i=d;l=t?e.coords.lat:void 0,u=t?e.coords.lon:void 0,c=e.fakeIt,d=!0,h={lat:l,lon:u},i&&r!==c&&b(),i&&(n||r!==c)&&y()}function A(e){e!==void 0&&document.addEventListener(e,function(e){try{k(JSON.parse(e.detail))}catch{}})}return A(t),A}
+								)();
+								</script>
+							<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>TOEIC学習管理アプリ</title>
@@ -8,6 +16,8 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         signOut, updatePassword, updateEmail, deleteUser, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAW7noTqq51oCUfEEWot8IEG00RHAdhuic",
@@ -22,6 +32,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app);
+
+// コーチ（島端さん）のログイン用アドレス。ご本人のGmailをそのまま使う。
+const COACH_EMAIL = 'g1522407@gmail.com';
 
 window._db = {
   async get(path) {
@@ -32,6 +46,37 @@ window._db = {
   async remove(path) { await remove(ref(db, path)); },
   listen(path, cb) {
     onValue(ref(db, path), snap => cb(snap.exists() ? snap.val() : null));
+  }
+};
+
+// 名前から、ログインに使う内部アドレスを作る（生徒には見えない・入力もしない）
+// 名前をそのまま使えない（記号や長さの制限がある）ため、ハッシュ化して固定長にする
+async function nameToEmail(name) {
+  const buf = new TextEncoder().encode('toeic-study:' + String(name).trim());
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  const hex = [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+  return 'u' + hex.slice(0, 40) + '@toeic-study.local';
+}
+
+window._auth = {
+  COACH_EMAIL,
+  onReady(cb) { onAuthStateChanged(auth, u => cb(u)); },
+  current() { return auth.currentUser; },
+  isCoach() { return !!auth.currentUser && auth.currentUser.email === COACH_EMAIL; },
+  async signUp(name, pw) { await createUserWithEmailAndPassword(auth, await nameToEmail(name), pw); },
+  async signIn(name, pw) { await signInWithEmailAndPassword(auth, await nameToEmail(name), pw); },
+  async signInCoach(pw) { await signInWithEmailAndPassword(auth, COACH_EMAIL, pw); },
+  async signOutNow() { await signOut(auth); },
+  async sendCoachReset() { await sendPasswordResetEmail(auth, COACH_EMAIL); },
+  async changePassword(pw) { await updatePassword(auth.currentUser, pw); },
+  async changeLoginName(newName) { await updateEmail(auth.currentUser, await nameToEmail(newName)); },
+  async deleteMe() { await deleteUser(auth.currentUser); },
+  // 移行用：別インスタンスでアカウントを作る（コーチのログインを保ったまま実行するため）
+  async createFor(name, pw) {
+    const app2 = initializeApp(firebaseConfig, 'migrate-' + Math.floor(performance.now() * 1000));
+    const auth2 = getAuth(app2);
+    try { await createUserWithEmailAndPassword(auth2, await nameToEmail(name), pw); }
+    finally { try { await signOut(auth2); } catch (e) {} }
   }
 };
 window._dbReady = true;
@@ -177,6 +222,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .btn-delete-account:hover{background:rgba(226,75,74,0.06)}
 .lock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(29,158,117,0.1);color:var(--green)}
 .nolock-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(239,159,39,0.1);color:var(--amber)}
+.mig-box{margin:0 16px 12px;padding:12px 14px;border-radius:var(--r12);border:0.5px solid var(--border);background:rgba(239,159,39,0.08)}
+.mig-title{font-size:13px;font-weight:600;color:var(--text)}
+.mig-sub{font-size:12px;color:var(--text2);margin:6px 0 10px;line-height:1.6}
+.mig-msg{font-size:12px;color:var(--text2);margin-top:10px;line-height:1.7}
 </style>
 </head>
 <body>
@@ -210,12 +259,15 @@ let curYear=now.getFullYear(),curMonth=now.getMonth();
 let coachYear=now.getFullYear(),coachMonth=now.getMonth();
 let modalDay=null,showGoalModal=false;
 let coachPwError='';
-let allData={},goals={},passwords={},coachPw='',detailStudent=null;
+let allData={},goals={},roster={},detailStudent=null;
+let migrateMsg='';
+let upgradeName='';
 let studentView='calendar';
 let rankRange='week';
 let showSettings=false;
 let nudgeSeen=false;
 
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function todayStr(){return`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
 function getDays(y,m){return new Date(y,m+1,0).getDate();}
 function getFirst(y,m){return new Date(y,m,1).getDay();}
@@ -227,35 +279,28 @@ function fmtMin(t){
 }
 function db(){return window._db;}
 
+// ログイン後にだけ呼ばれる。ログイン前にデータを読むことはしない。
 async function loadAll(){
-  try{const pw=await db().get('coach/password');if(pw)coachPw=pw;}catch(e){}
-  try{
-    const data=await db().get('students');
-    if(data){
-      for(const[name,ndata]of Object.entries(data)){
-        if(ndata.password)passwords[name]=ndata.password;
-        if(ndata.study)for(const[date,v]of Object.entries(ndata.study))allData[`${name}/${date}`]=v;
-        if(ndata.goals)for(const[ym,v]of Object.entries(ndata.goals))goals[`${name}/${ym}`]=v;
-      }
+  allData={};goals={};roster={};
+  const data=await db().get('students');
+  if(data){
+    for(const[name,ndata]of Object.entries(data)){
+      roster[name]={auth:!!ndata.auth,legacyPw:ndata.password||null};
+      if(ndata.study)for(const[date,v]of Object.entries(ndata.study))allData[`${name}/${date}`]=v;
+      if(ndata.goals)for(const[ym,v]of Object.entries(ndata.goals))goals[`${name}/${ym}`]=v;
     }
-  }catch(e){}
-  document.getElementById('loading').style.display='none';
-  document.getElementById('app').style.display='block';
-
-  if(myName){
-    page=passwords[myName]?'setup_pw_login':'setup_pw_force';
-  } else {
-    page='setup';
   }
-  render();
 }
+function showApp(){
+  const l=document.getElementById('loading');if(l)l.style.display='none';
+  const a=document.getElementById('app');if(a)a.style.display='block';
+}
+async function markAuthed(name){try{await db().set(`students/${name}/auth`,true);}catch(e){}}
 
 async function saveStudyDay(name,date,data){try{await db().set(`students/${name}/study/${date}`,data);}catch(e){}allData[`${name}/${date}`]=data;}
 async function deleteStudyDay(name,date){try{await db().remove(`students/${name}/study/${date}`);}catch(e){}delete allData[`${name}/${date}`];}
 async function saveGoal(name,ym,data){try{await db().set(`students/${name}/goals/${ym}`,data);}catch(e){}goals[`${name}/${ym}`]=data;}
-async function saveStudentPassword(name,pw){try{await db().set(`students/${name}/password`,pw);}catch(e){}passwords[name]=pw;}
-async function removeStudentPassword(name){try{await db().remove(`students/${name}/password`);}catch(e){}delete passwords[name];}
-async function saveCoachPw(pw){try{await db().set('coach/password',pw);}catch(e){}coachPw=pw;}
+async function removeLegacyPw(name){try{await db().remove(`students/${name}/password`);}catch(e){}if(roster[name])roster[name].legacyPw=null;}
 
 function getStudentMonthData(name,y,m){
   const prefix=`${y}-${String(m+1).padStart(2,'0')}-`;
@@ -273,16 +318,15 @@ function allStudents(){
   const names=new Set();
   for(const k of Object.keys(allData))names.add(k.split('/')[0]);
   for(const k of Object.keys(goals))names.add(k.split('/')[0]);
-  for(const k of Object.keys(passwords))names.add(k);
+  for(const k of Object.keys(roster))names.add(k);
   return[...names].filter(Boolean);
 }
 
 function render(){document.getElementById('app').innerHTML=buildPage();bindEvents();}
 function buildPage(){
   if(page==='setup')return buildSetup();
-  if(page==='setup_pw_new')return buildSetupPwNew();
-  if(page==='setup_pw_login')return buildSetupPwLogin();
-  if(page==='setup_pw_force')return buildSetupPwForce();
+  if(page==='signup')return buildSignup();
+  if(page==='upgrade_pw')return buildUpgradePw();
   if(page==='student')return buildStudent();
   if(page==='coach_login')return buildCoachLogin();
   if(page==='coach')return buildCoach();
@@ -290,97 +334,146 @@ function buildPage(){
   return'';
 }
 
-// ── SETUP: 名前入力 ────────────────────────────────────────
+// ── SETUP: ログイン（名前＋パスワード） ──────────────────
 function buildSetup(){
   return`<div class="setup-wrap">
     <div class="setup-logo">📚</div>
     <div><div class="setup-title">TOEIC学習アプリ</div>
-    <div class="setup-sub" style="margin-top:8px">名前を入力してください</div></div>
-    <input class="big-input" id="nameInput" placeholder="例：田中 花子" autocomplete="name">
-    <div class="err-msg">${setupErr}</div>
-    <button class="btn-primary" onclick="doSetupName()">次へ</button>
-    <div style="text-align:center"><button class="btn-ghost" onclick="goCoachLogin()">コーチとして入る →</button></div>
-  </div>`;
-}
-
-async function doSetupName(){
-  const v=document.getElementById('nameInput')?.value?.trim();
-  if(!v){setupErr='名前を入力してください';render();return;}
-  setupErr='';setupNameInput=v;
-  const existing=await db().get(`students/${v}`);
-  if(!existing){page='setup_pw_new';}
-  else if(!existing.password){myName=v;localStorage.setItem('myName',v);page='setup_pw_force';}
-  else{myName=v;localStorage.setItem('myName',v);passwords[v]=existing.password;page='setup_pw_login';}
-  render();
-}
-
-// ── SETUP: 新規パスワード設定 ──────────────────────────────
-function buildSetupPwNew(){
-  return`<div class="setup-wrap">
-    <div class="setup-logo">🔐</div>
-    <div><div class="setup-title">パスワードを設定</div>
-    <div class="setup-sub" style="margin-top:8px"><strong>${setupNameInput}</strong> さん、はじめまして！<br>ログイン用のパスワードを設定してください。</div></div>
-    <div class="info-box">このパスワードは自分専用です。忘れた場合はコーチに連絡してください。</div>
-    <input class="big-input" id="pw1" type="password" placeholder="パスワード（4文字以上）">
-    <input class="big-input" id="pw2" type="password" placeholder="パスワード（確認）">
-    <div class="err-msg">${setupErr}</div>
-    <button class="btn-primary" onclick="doSetupPwNew()">登録して始める</button>
-    <div style="text-align:center"><button class="btn-ghost" onclick="backToSetup()">← 名前の入力に戻る</button></div>
-  </div>`;
-}
-
-async function doSetupPwNew(){
-  const p1=document.getElementById('pw1')?.value;
-  const p2=document.getElementById('pw2')?.value;
-  if(!p1||p1.length<4){setupErr='4文字以上で設定してください';render();return;}
-  if(p1!==p2){setupErr='パスワードが一致しません';render();return;}
-  setupErr='';myName=setupNameInput;localStorage.setItem('myName',myName);
-  await saveStudentPassword(myName,p1);myAuth=true;page='student';render();
-}
-
-// ── SETUP: ログイン ────────────────────────────────────────
-function buildSetupPwLogin(){
-  return`<div class="setup-wrap">
-    <div class="setup-logo">🔑</div>
-    <div><div class="setup-title">ログイン</div>
-    <div class="setup-sub" style="margin-top:8px"><strong>${myName}</strong> さんのパスワードを入力してください</div></div>
+    <div class="setup-sub" style="margin-top:8px">名前とパスワードを入力してください</div></div>
+    <input class="big-input" id="nameInput" value="${esc(setupNameInput||myName)}" placeholder="例：田中 花子" autocomplete="name">
     <input class="big-input" id="pwInput" type="password" placeholder="パスワード" autocomplete="current-password">
     <div class="err-msg">${setupErr}</div>
-    <button class="btn-primary" onclick="doLogin()">ログイン</button>
-    <div style="text-align:center"><button class="btn-ghost" onclick="backToSetup()">← 別の名前で入る</button></div>
+    <button class="btn-primary" onclick="doLoginSubmit()">ログイン</button>
+    <div style="text-align:center"><button class="btn-ghost" onclick="goSignup()">はじめて使う方はこちら →</button></div>
+    <div style="text-align:center;margin-top:2px"><button class="btn-ghost" onclick="goCoachLogin()">コーチとして入る →</button></div>
   </div>`;
 }
 
-async function doLogin(){
-  const v=document.getElementById('pwInput')?.value;
-  if(!v){setupErr='パスワードを入力してください';render();return;}
-  if(v===passwords[myName]){setupErr='';myAuth=true;page='student';render();}
-  else{setupErr='パスワードが違います';render();}
+function authErrMsg(e){
+  const c=(e&&e.code)||'';
+  if(c==='auth/invalid-credential'||c==='auth/wrong-password'||c==='auth/user-not-found'||c==='auth/invalid-login-credentials')
+    return '名前かパスワードが違います。はじめての方は「はじめて使う方はこちら」から登録してください。';
+  if(c==='auth/too-many-requests')return '試行の回数が多すぎます。少し時間をおいてからお試しください。';
+  if(c==='auth/network-request-failed')return '通信エラーです。電波の良い場所でもう一度お試しください。';
+  if(c==='auth/operation-not-allowed'||c==='auth/configuration-not-found')return 'ログイン機能がまだ有効になっていません。コーチに連絡してください。';
+  return 'ログインできませんでした（'+c+'）';
 }
 
-// ── SETUP: 既存ユーザー強制パスワード設定 ─────────────────
-function buildSetupPwForce(){
+// 移行期間中のみ：Authにまだアカウントが無い生徒を、旧パスワードで受け入れて自動移行する
+// 戻り値 'ok'=移行して入れた / 'short'=本人確認はできたがパスワードが短い / 'no'=該当なし
+async function tryLegacyLogin(name,pw){
+  let stored=null;
+  try{stored=await db().get(`students/${name}/password`);}catch(e){return 'no';}
+  if(!stored||stored!==pw)return 'no';
+  if(String(pw).length<6)return 'short';
+  try{
+    await window._auth.signUp(name,pw);
+    await db().set(`students/${name}/auth`,true);
+    await db().remove(`students/${name}/password`);
+    return 'ok';
+  }catch(e){return 'no';}
+}
+
+// パスワードが6文字未満だった生徒に、その場で新しいパスワードを決めてもらう
+function buildUpgradePw(){
   return`<div class="setup-wrap">
     <div class="setup-logo">🔐</div>
-    <div><div class="setup-title">パスワードの設定が必要です</div>
-    <div class="setup-sub" style="margin-top:8px">セキュリティ強化のため、パスワードを設定してください。</div></div>
-    <div class="warn-box">⚠️ 設定するまでアプリを使用できません</div>
-    <input class="big-input" id="pw1" type="password" placeholder="パスワード（4文字以上）">
-    <input class="big-input" id="pw2" type="password" placeholder="パスワード（確認）">
+    <div><div class="setup-title">パスワードの変更をお願いします</div>
+    <div class="setup-sub" style="margin-top:8px"><strong>${esc(upgradeName)}</strong> さん、確認できました。<br>
+      安全のため、パスワードが6文字以上必要になりました。</div></div>
+    <div class="info-box">新しいパスワードを決めてください。学習記録はそのまま残ります。</div>
+    <input class="big-input" id="pw1" type="password" placeholder="新しいパスワード（6文字以上）">
+    <input class="big-input" id="pw2" type="password" placeholder="新しいパスワード（確認）">
     <div class="err-msg">${setupErr}</div>
-    <button class="btn-primary" onclick="doSetupPwForce()">設定して入る</button>
+    <button class="btn-primary" onclick="doUpgradePw()">変更して始める</button>
+    <div style="text-align:center"><button class="btn-ghost" onclick="backToSetup()">← 戻る</button></div>
   </div>`;
 }
 
-async function doSetupPwForce(){
-  const p1=document.getElementById('pw1')?.value;
-  const p2=document.getElementById('pw2')?.value;
-  if(!p1||p1.length<4){setupErr='4文字以上で設定してください';render();return;}
+async function doUpgradePw(){
+  const p1=document.getElementById('pw1')?.value||'';
+  const p2=document.getElementById('pw2')?.value||'';
+  if(p1.length<6){setupErr='6文字以上にしてください';render();return;}
   if(p1!==p2){setupErr='パスワードが一致しません';render();return;}
-  setupErr='';await saveStudentPassword(myName,p1);myAuth=true;page='student';render();
+  setupErr='変更中…';render();
+  try{await window._auth.signUp(upgradeName,p1);}
+  catch(e){setupErr=authErrMsg(e);render();return;}
+  try{
+    await db().set(`students/${upgradeName}/auth`,true);
+    await db().remove(`students/${upgradeName}/password`);
+  }catch(e){}
+  await enterAsStudent(upgradeName);
 }
 
-function backToSetup(){setupErr='';setupNameInput='';myName='';localStorage.removeItem('myName');page='setup';render();}
+async function doLoginSubmit(){
+  const n=document.getElementById('nameInput')?.value?.trim();
+  const p=document.getElementById('pwInput')?.value||'';
+  if(!n){setupErr='名前を入力してください';render();return;}
+  if(!p){setupErr='パスワードを入力してください';render();return;}
+  setupNameInput=n;setupErr='ログイン中…';render();
+  try{
+    await window._auth.signIn(n,p);
+  }catch(e){
+    const r=await tryLegacyLogin(n,p);
+    if(r==='short'){upgradeName=n;setupErr='';page='upgrade_pw';render();return;}
+    if(r!=='ok'){setupErr=authErrMsg(e);render();return;}
+  }
+  await enterAsStudent(n);
+}
+
+async function enterAsStudent(name){
+  myName=name;localStorage.setItem('myName',myName);myAuth=true;setupErr='';
+  try{await loadAll();}
+  catch(e){setupErr='データを読み込めませんでした。通信状況を確認してください。';await window._auth.signOutNow();myAuth=false;page='setup';render();return;}
+  markAuthed(myName);
+  nudgeSeen=false;page='student';render();
+}
+
+function goSignup(){setupErr='';page='signup';render();}
+
+// ── SETUP: はじめての登録 ──────────────────────────────────
+function buildSignup(){
+  return`<div class="setup-wrap">
+    <div class="setup-logo">🔐</div>
+    <div><div class="setup-title">はじめての登録</div>
+    <div class="setup-sub" style="margin-top:8px">名前とパスワードを決めてください。<br>次回からこの2つでログインします。</div></div>
+    <input class="big-input" id="nameInput" value="${esc(setupNameInput)}" placeholder="例：田中 花子" autocomplete="name">
+    <input class="big-input" id="pw1" type="password" placeholder="パスワード（6文字以上）">
+    <input class="big-input" id="pw2" type="password" placeholder="パスワード（確認）">
+    <div class="info-box">名前はコーチの画面に表示されます。ふだん呼ばれている名前で登録してください。パスワードを忘れたときはコーチに連絡してください。</div>
+    <div class="err-msg">${setupErr}</div>
+    <button class="btn-primary" onclick="doSignup()">登録して始める</button>
+    <div style="text-align:center"><button class="btn-ghost" onclick="backToSetup()">← ログイン画面に戻る</button></div>
+  </div>`;
+}
+
+async function doSignup(){
+  const n=document.getElementById('nameInput')?.value?.trim();
+  const p1=document.getElementById('pw1')?.value||'';
+  const p2=document.getElementById('pw2')?.value||'';
+  if(!n){setupErr='名前を入力してください';render();return;}
+  if(p1.length<6){setupErr='パスワードは6文字以上にしてください';render();return;}
+  if(p1!==p2){setupErr='パスワードが一致しません';render();return;}
+  setupNameInput=n;setupErr='登録中…';render();
+  try{await window._auth.signUp(n,p1);}
+  catch(e){
+    const c=(e&&e.code)||'';
+    if(c==='auth/email-already-in-use')setupErr='その名前はすでに登録されています。ログイン画面からお入りください。';
+    else if(c==='auth/weak-password')setupErr='パスワードは6文字以上にしてください';
+    else setupErr=authErrMsg(e);
+    render();return;
+  }
+  await enterAsStudent(n);
+}
+
+function backToSetup(){setupErr='';page='setup';render();}
+
+async function doLogout(){
+  try{await window._auth.signOutNow();}catch(e){}
+  allData={};goals={};roster={};
+  myAuth=false;setupErr='';setupNameInput='';showSettings=false;detailStudent=null;
+  page='setup';render();
+}
 
 // ── STUDENT ────────────────────────────────────────────────
 function buildStudent(){
@@ -474,12 +567,18 @@ function buildSettingsModal(){
       <div class="gdiv"></div>
 
       <div class="glbl">パスワードを変更</div>
-      <input class="big-input" id="newPw1" type="password" placeholder="新しいパスワード（4文字以上）" style="margin-bottom:8px">
+      <input class="big-input" id="newPw1" type="password" placeholder="新しいパスワード（6文字以上）" style="margin-bottom:8px">
       <input class="big-input" id="newPw2" type="password" placeholder="新しいパスワード（確認）">
       <div class="err-msg" id="pwChangeErr"></div>
       <div class="mactions" style="margin-top:10px">
         <button class="btn-cancel" onclick="closeSettings()">キャンセル</button>
         <button class="btn-save" onclick="doChangePw()">変更する</button>
+      </div>
+
+      <div class="gdiv"></div>
+
+      <div class="mactions">
+        <button class="btn-cancel" style="flex:1" onclick="doLogout()">ログアウト</button>
       </div>
 
       <div class="delete-zone">
@@ -492,25 +591,48 @@ function buildSettingsModal(){
 
 async function doChangeName(){
   const v=document.getElementById('newNameInput')?.value?.trim();
-  if(!v)return;
-  myName=v;localStorage.setItem('myName',myName);showSettings=false;render();
+  if(!v||v===myName){closeSettings();return;}
+  if(roster[v]){alert('その名前はすでに使われています。別の名前にしてください。');return;}
+  if(!confirm(`名前を「${myName}」から「${v}」に変更します。\nこれまでの記録も一緒に移動します。`))return;
+  const old=myName;
+  try{await window._auth.changeLoginName(v);}
+  catch(e){
+    const c=(e&&e.code)||'';
+    if(c==='auth/requires-recent-login')alert('安全のため、いちどログアウトして入り直してから変更してください。');
+    else alert('名前を変更できませんでした。コーチに連絡してください。（'+c+'）');
+    return;
+  }
+  try{
+    const node=await db().get(`students/${old}`);
+    if(node){await db().set(`students/${v}`,node);await db().remove(`students/${old}`);}
+  }catch(e){alert('記録の移動に失敗しました。コーチに連絡してください。');}
+  myName=v;localStorage.setItem('myName',v);
+  try{await loadAll();}catch(e){}
+  showSettings=false;render();
 }
 async function doChangePw(){
   const p1=document.getElementById('newPw1')?.value;
   const p2=document.getElementById('newPw2')?.value;
   const errEl=document.getElementById('pwChangeErr');
-  if(!p1||p1.length<4){if(errEl)errEl.textContent='4文字以上で設定してください';return;}
+  if(!p1||p1.length<6){if(errEl)errEl.textContent='6文字以上で設定してください';return;}
   if(p1!==p2){if(errEl)errEl.textContent='パスワードが一致しません';return;}
-  await saveStudentPassword(myName,p1);
+  try{await window._auth.changePassword(p1);}
+  catch(e){
+    const c=(e&&e.code)||'';
+    if(errEl)errEl.textContent=c==='auth/requires-recent-login'
+      ?'安全のため、いちどログアウトして入り直してから変更してください'
+      :'変更できませんでした（'+c+'）';
+    return;
+  }
   showSettings=false;alert('パスワードを変更しました');render();
 }
 async function doDeleteAccount(){
   if(!confirm(`「${myName}」のすべてのデータを削除して最初の画面に戻りますか？\n\nこの操作は取り消せません。`))return;
   try{await db().remove(`students/${myName}`);}catch(e){}
-  for(const k of Object.keys(allData))if(k.startsWith(myName+'/'))delete allData[k];
-  for(const k of Object.keys(goals))if(k.startsWith(myName+'/'))delete goals[k];
-  delete passwords[myName];
-  localStorage.removeItem('myName');myName='';myAuth=false;showSettings=false;page='setup';render();
+  try{await window._auth.deleteMe();}
+  catch(e){alert('記録は削除しましたが、ログイン情報の削除に失敗しました。コーチに連絡してください。');}
+  localStorage.removeItem('myName');myName='';
+  await doLogout();
 }
 
 // ── RANKING ────────────────────────────────────────────────
@@ -664,20 +786,88 @@ function buildGoalModal(){
 function buildCoachLogin(){
   return`<div class="setup-wrap">
     <div><div class="setup-title">コーチログイン</div>
-    <div class="setup-sub" style="margin-top:8px">${coachPw?'パスワードを入力してください':'初回：パスワードを新規設定します'}</div></div>
-    <input class="big-input" id="pwInput" type="password" placeholder="パスワード">
+    <div class="setup-sub" style="margin-top:8px">コーチ用のパスワードを入力してください</div></div>
+    <input class="big-input" id="pwInput" type="password" placeholder="パスワード" autocomplete="current-password">
     ${coachPwError?`<div class="err-msg">${coachPwError}</div>`:''}
-    <button class="btn-primary" onclick="doCoachLogin()">${coachPw?'ログイン':'パスワードを設定'}</button>
-    <div style="text-align:center"><button class="btn-ghost" onclick="backToStudent()">← 生徒画面に戻る</button></div>
+    <button class="btn-primary" onclick="doCoachLogin()">ログイン</button>
+    <div style="text-align:center"><button class="btn-ghost" onclick="doCoachReset()">パスワードを忘れた場合</button></div>
+    <div style="text-align:center;margin-top:2px"><button class="btn-ghost" onclick="backToStudent()">← 戻る</button></div>
   </div>`;
+}
+
+async function doCoachReset(){
+  if(!confirm('コーチ用のメールアドレス宛に、パスワード再設定のメールを送ります。よろしいですか？'))return;
+  try{await window._auth.sendCoachReset();coachPwError='再設定メールを送りました。メールを確認してください。';}
+  catch(e){coachPwError='送信できませんでした（'+((e&&e.code)||'不明')+'）';}
+  render();
 }
 
 async function doCoachLogin(){
   const v=document.getElementById('pwInput')?.value?.trim();
   if(!v){coachPwError='パスワードを入力してください';render();return;}
-  if(!coachPw){await saveCoachPw(v);page='coach';coachPwError='';render();}
-  else if(v===coachPw){page='coach';coachPwError='';render();}
-  else{coachPwError='パスワードが違います';render();}
+  coachPwError='ログイン中…';render();
+  try{await window._auth.signInCoach(v);}
+  catch(e){coachPwError=authErrMsg(e);render();return;}
+  myName='';myAuth=false;coachPwError='';migrateMsg='';
+  try{await loadAll();}
+  catch(e){coachPwError='データを読み込めませんでした。';render();return;}
+  page='coach';render();
+}
+
+// ── 旧方式からの移行（コーチ画面） ─────────────────────────
+function buildMigratePanel(){
+  const pending=allStudents().filter(n=>roster[n]&&roster[n].legacyPw);
+  if(!pending.length&&!migrateMsg)return'';
+  return`<div class="mig-box">
+    ${pending.length?`<div class="mig-title">⚠️ 移行が必要な生徒が ${pending.length}人 います</div>
+    <div class="mig-sub">パスワードがデータベースに保存されたままの生徒です。ログイン用アカウントを作り、保存されたパスワードを削除します。</div>
+    <button class="btn-sm" onclick="doMigrateAll()">🔐 まとめて移行する</button>`:''}
+    ${migrateMsg?`<div class="mig-msg">${migrateMsg}</div>`:''}
+  </div>`;
+}
+
+async function doMigrateAll(){
+  const pending=allStudents().filter(n=>roster[n]&&roster[n].legacyPw);
+  if(!pending.length)return;
+  if(!confirm(`${pending.length}人分のログインアカウントを作成します。\nパスワードは今のものがそのまま引き継がれます。`))return;
+  let ok=0;const short=[],fail=[];
+  migrateMsg='移行中…';render();
+  for(const n of pending){
+    const pw=roster[n].legacyPw;
+    if(String(pw).length<6){short.push(n);continue;}
+    try{
+      await window._auth.createFor(n,pw);
+      await db().set(`students/${n}/auth`,true);
+      await removeLegacyPw(n);ok++;
+    }catch(e){
+      if((e&&e.code)==='auth/email-already-in-use'){
+        await db().set(`students/${n}/auth`,true);await removeLegacyPw(n);ok++;
+      }else fail.push(esc(n)+'（'+((e&&e.code)||'不明')+'）');
+    }
+  }
+  let m=`✅ ${ok}人の移行が完了しました。`;
+  if(short.length)m+=`<br><br>⚠️ パスワードが6文字未満のため移行できませんでした：${short.map(esc).join('、')}<br>各カードの「仮パスワード発行」で新しいパスワードを設定し、本人に伝えてください。`;
+  if(fail.length)m+=`<br><br>❌ 失敗：${fail.join('、')}`;
+  migrateMsg=m;
+  try{await loadAll();}catch(e){}
+  render();
+}
+
+async function doIssueTempPw(name){
+  const pw=prompt(`「${name}」の仮パスワードを入力してください（6文字以上）。\n設定したあと、本人に伝えてください。`);
+  if(!pw)return;
+  if(pw.length<6){alert('6文字以上にしてください');return;}
+  try{await window._auth.createFor(name,pw);}
+  catch(e){
+    const c=(e&&e.code)||'不明';
+    alert(c==='auth/email-already-in-use'?'この生徒はすでにログイン用アカウントを持っています。':'設定できませんでした（'+c+'）');
+    return;
+  }
+  await db().set(`students/${name}/auth`,true);
+  await removeLegacyPw(name);
+  try{await loadAll();}catch(e){}
+  migrateMsg=`「${esc(name)}」の仮パスワードを設定しました。本人に伝えてください。`;
+  render();
 }
 
 // ── COACH DASHBOARD ────────────────────────────────────────
@@ -691,8 +881,9 @@ function buildCoach(){
   return`
     <div class="topbar">
       <div><div class="topbar-title">コーチビュー</div><div class="topbar-sub">全生徒の進捗確認</div></div>
-      <button class="icon-btn" onclick="backToStudent()">← 生徒画面</button>
+      <button class="icon-btn" onclick="doLogout()">ログアウト</button>
     </div>
+    ${buildMigratePanel()}
     <div class="mnav-row">
       <button class="mnav-btn" onclick="coachPrev()">◀</button>
       <span class="mnav-title">${coachYear}年 ${MN[coachMonth]}</span>
@@ -719,13 +910,16 @@ function buildStudentCard(name,y,m){
     for(const v of Object.values(md))t+=Number(v[c.key]||0);
     if(t>0)cats+=`<span class="sc-cat" style="color:${c.color}">${c.label} ${fmtMin(t)}</span>`;
   }
-  const hasPw=!!passwords[name];
+  const r=roster[name]||{};
+  const badge=r.auth?`<span class="lock-badge">🔒 ログイン設定済</span>`
+    :r.legacyPw?`<span class="nolock-badge">⚠️ 移行が必要</span>`
+    :`<span class="nolock-badge">⚠️ 未登録</span>`;
   return`<div class="sc">
     <div onclick="openDetail('${name}')" style="cursor:pointer">
       <div class="sc-top">
         <div style="display:flex;align-items:center;gap:8px">
           <div class="sc-name">${name}</div>
-          ${hasPw?`<span class="lock-badge">🔒 PW設定済</span>`:`<span class="nolock-badge">⚠️ PW未設定</span>`}
+          ${badge}
         </div>
         <div class="sc-score">目標 ${g.score||'--'}点</div>
       </div>
@@ -735,14 +929,18 @@ function buildStudentCard(name,y,m){
     </div>
     <div class="sc-actions">
       <button class="btn-sm" onclick="openDetail('${name}')">📅 詳細</button>
-      ${hasPw?`<button class="btn-sm btn-sm-red" onclick="doResetStudentPw('${name}')">🔑 PWリセット</button>`:''}
+      ${r.auth?`<button class="btn-sm" onclick="doForgotPwHelp('${name}')">🔑 PWを忘れた時</button>`
+             :`<button class="btn-sm btn-sm-red" onclick="doIssueTempPw('${name}')">🔑 仮パスワード発行</button>`}
     </div>
   </div>`;
 }
 
-async function doResetStudentPw(name){
-  if(!confirm(`「${name}」のパスワードをリセットしますか？\n次回ログイン時に再設定が必要になります。`))return;
-  await removeStudentPassword(name);render();
+function doForgotPwHelp(name){
+  alert(`「${name}」がパスワードを忘れた場合の手順\n\n`+
+    `1. Firebaseコンソール →「Authentication」→ ユーザー一覧を開く\n`+
+    `2. 該当のユーザーを削除する\n`+
+    `3. 生徒に、同じ名前で「はじめて使う方はこちら」から登録し直してもらう\n\n`+
+    `この手順で、これまでの学習記録はそのまま残ります。`);
 }
 
 function buildCoachDetail(){
@@ -761,12 +959,19 @@ function buildCoachDetail(){
 }
 
 function bindEvents(){
-  if(page==='setup')document.getElementById('nameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doSetupName();});
-  if(page==='setup_pw_new'||page==='setup_pw_force'){
-    document.getElementById('pw1')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pw2')?.focus();});
-    document.getElementById('pw2')?.addEventListener('keydown',e=>{if(e.key==='Enter')page==='setup_pw_new'?doSetupPwNew():doSetupPwForce();});
+  if(page==='setup'){
+    document.getElementById('nameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pwInput')?.focus();});
+    document.getElementById('pwInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doLoginSubmit();});
   }
-  if(page==='setup_pw_login')document.getElementById('pwInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  if(page==='signup'){
+    document.getElementById('nameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pw1')?.focus();});
+    document.getElementById('pw1')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pw2')?.focus();});
+    document.getElementById('pw2')?.addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
+  }
+  if(page==='upgrade_pw'){
+    document.getElementById('pw1')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pw2')?.focus();});
+    document.getElementById('pw2')?.addEventListener('keydown',e=>{if(e.key==='Enter')doUpgradePw();});
+  }
   if(page==='coach_login')document.getElementById('pwInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doCoachLogin();});
   if(modalDay)for(const c of CATS)document.getElementById('inp_'+c.key)?.addEventListener('input',updateTotal);
 }
@@ -802,8 +1007,33 @@ async function doSaveGoal(){
   await saveGoal(myName,ymStr(curYear,curMonth),g);showGoalModal=false;render();
 }
 
-if(window._dbReady){loadAll();}
-else{document.addEventListener('db-ready',loadAll);}
+// ── 起動 ──────────────────────────────────────────────────
+// ログイン状態が確定してから画面を出す。前回ログインしていれば、そのまま入れる。
+function boot(){
+  let done=false;
+  window._auth.onReady(async user=>{
+    if(done)return;done=true;
+    showApp();
+    if(user&&window._auth.isCoach()){
+      try{await loadAll();page='coach';}
+      catch(e){await window._auth.signOutNow();page='setup';}
+    }else if(user){
+      const n=localStorage.getItem('myName')||'';
+      if(!n){try{await window._auth.signOutNow();}catch(e){}page='setup';}
+      else{
+        myName=n;myAuth=true;
+        try{await loadAll();page='student';}
+        catch(e){myAuth=false;setupErr='データを読み込めませんでした。もう一度ログインしてください。';try{await window._auth.signOutNow();}catch(e2){}page='setup';}
+      }
+    }else{
+      page='setup';
+    }
+    render();
+  });
+}
+if(window._dbReady){boot();}
+else{document.addEventListener('db-ready',boot);}
 </script>
-</body>
-</html>
+
+
+</body></html>
