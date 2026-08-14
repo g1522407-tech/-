@@ -218,6 +218,38 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .mig-title{font-size:13px;font-weight:600;color:var(--text)}
 .mig-sub{font-size:12px;color:var(--text2);margin:6px 0 10px;line-height:1.6}
 .mig-msg{font-size:12px;color:var(--text2);margin-top:10px;line-height:1.7}
+/* ── キャラクター ───────────────────────────────── */
+.chara-ov{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.chara-card{width:100%;max-width:430px;background:var(--bg);border-radius:var(--r16) var(--r16) 0 0;padding:18px 16px 22px;animation:slideUp .28s cubic-bezier(.2,.8,.3,1)}
+.chara-row{display:flex;gap:12px;align-items:flex-start}
+.chara-face{width:62px;height:62px;flex:0 0 62px;border-radius:50%;overflow:hidden;background:var(--bg2)}
+.chara-body{flex:1;min-width:0}
+.chara-name{font-size:11px;color:var(--text3);margin-bottom:4px}
+.chara-bubble{position:relative;background:var(--bg2);border-radius:var(--r12);padding:11px 13px;font-size:14px;line-height:1.75;color:var(--text)}
+.chara-bubble:before{content:'';position:absolute;left:-6px;top:14px;width:0;height:0;border:6px solid transparent;border-right-color:var(--bg2);border-left:0}
+.chara-acts{display:flex;gap:8px;margin-top:14px}
+.chara-acts button{flex:1;padding:13px;border-radius:var(--r12);font-size:14px;font-weight:600;cursor:pointer;border:0}
+.chara-sub{background:var(--bg3);color:var(--text2)}
+.chara-main{background:var(--green);color:#fff}
+.chara-pick{display:flex;gap:8px;margin-top:14px}
+.chara-opt{flex:1;border:1.5px solid var(--border);border-radius:var(--r12);padding:10px 4px;text-align:center;cursor:pointer;background:none}
+.chara-opt.on{border-color:var(--green);background:rgba(29,158,117,0.08)}
+.chara-opt-face{width:46px;height:46px;margin:0 auto 6px;border-radius:50%;overflow:hidden}
+.chara-opt-nm{font-size:12px;font-weight:600;color:var(--text)}
+.chara-opt-rl{font-size:10px;color:var(--text3);margin-top:1px}
+/* ── コーチ：要フォロー ─────────────────────────── */
+.fw-box{margin:0 16px 12px;border:0.5px solid var(--border);border-radius:var(--r12);overflow:hidden}
+.fw-head{padding:10px 14px;font-size:13px;font-weight:600;background:var(--bg2)}
+.fw-item{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:0.5px solid var(--border);font-size:13px}
+.fw-nm{font-weight:600;flex:0 1 auto;max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fw-msg{flex:1;min-width:0;font-size:11px;color:var(--text3);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fw-tag{font-size:11px;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.fw-red{background:rgba(226,75,74,0.12);color:var(--red)}
+.fw-amb{background:rgba(239,159,39,0.12);color:var(--amber)}
+.fw-none{padding:14px;font-size:12px;color:var(--text3);text-align:center}
+.fw-copy{font-size:11px;padding:5px 9px;border-radius:var(--r8);border:0.5px solid var(--border);background:none;color:var(--text2);cursor:pointer;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -254,10 +286,11 @@ let coachPwError='';
 let allData={},goals={},roster={},detailStudent=null;
 let migrateMsg='';
 let upgradeName='';
+let followCache=[];
 let studentView='calendar';
 let rankRange='week';
 let showSettings=false;
-let nudgeSeen=false;
+let charaEvent=null,myCharaId='',charaPick='';
 
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function todayStr(){return`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
@@ -277,7 +310,7 @@ async function loadAll(){
   const data=await db().get('students');
   if(data){
     for(const[name,ndata]of Object.entries(data)){
-      roster[name]={auth:!!ndata.auth,legacyPw:ndata.password||null};
+      roster[name]={auth:!!ndata.auth,legacyPw:ndata.password||null,chara:ndata.chara||''};
       if(ndata.study)for(const[date,v]of Object.entries(ndata.study))allData[`${name}/${date}`]=v;
       if(ndata.goals)for(const[ym,v]of Object.entries(ndata.goals))goals[`${name}/${ym}`]=v;
     }
@@ -418,7 +451,10 @@ async function enterAsStudent(name){
   try{await loadAll();}
   catch(e){setupErr='データを読み込めませんでした。通信状況を確認してください。';await window._auth.signOutNow();myAuth=false;page='setup';render();return;}
   markAuthed(myName);
-  nudgeSeen=false;page='student';render();
+  myCharaId=(roster[myName]&&roster[myName].chara)||'';
+  charaPick=myCharaId||'jiyoung';
+  openChara(decideChara());
+  page='student';render();
 }
 
 function goSignup(){setupErr='';page='signup';render();}
@@ -496,7 +532,7 @@ function buildStudent(){
     </div>
     ${tabs}${body}
     ${showSettings?buildSettingsModal():''}
-    ${buildNudge()}
+    ${buildChara()}
   `;
 }
 
@@ -522,26 +558,183 @@ function daysSinceLast(name){
   const b=new Date(p[0],p[1]-1,p[2]);
   return{last:last,days:Math.round((a-b)/86400000)};
 }
-function buildNudge(){
-  if(nudgeSeen||modalDay||showGoalModal||showSettings)return'';
+// 連続記録日数（今日または昨日から遡って、0分より多く記録した日が続いた数）
+function streakDays(name){
+  const pre=name+'/';const set=new Set();
+  for(const k of Object.keys(allData)){
+    if(k.indexOf(pre)!==0)continue;
+    const v=allData[k]||{};let t=0;for(const c of CATS)t+=Number(v[c.key]||0);
+    if(t>0)set.add(k.slice(pre.length));
+  }
+  const d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const fmt=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
+  if(!set.has(fmt(d)))d.setDate(d.getDate()-1);
+  let n=0;
+  while(set.has(fmt(d))){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+// 直近7日でまったく手をつけていないカテゴリ（他はやっている場合のみ）
+function zeroCat(name){
+  const sums={};let total=0;
+  for(const c of CATS)sums[c.key]=0;
+  const d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  for(let i=0;i<7;i++){
+    const k=`${name}/${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const v=allData[k]||{};
+    for(const c of CATS){const x=Number(v[c.key]||0);sums[c.key]+=x;total+=x;}
+    d.setDate(d.getDate()-1);
+  }
+  if(total<60)return null;
+  const z=CATS.filter(c=>sums[c.key]===0);
+  return z.length&&z.length<CATS.length?z[Math.floor(Math.random()*z.length)]:null;
+}
+
+// ── キャラクター（自作SVG・著作権フリー） ────────────────
+function shade(hex,p){const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;r=Math.max(0,Math.min(255,r+p));g=Math.max(0,Math.min(255,g+p));b=Math.max(0,Math.min(255,b+p));return'#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);}
+function hairPath(style,c){switch(style){
+  case'bob':  return'<path d="M26,54 Q25,20 50,20 Q75,20 74,54 L74,58 Q74,42 66,40 L66,30 Q58,26 50,26 Q42,26 34,30 L34,40 Q26,42 26,58 Z" fill="'+c+'"/>';
+  case'long': return'<path d="M25,70 C23,25 44,18 50,18 C56,18 77,25 75,70 L67,70 C70,40 64,32 60,33 C56,35 44,35 40,33 C36,32 30,40 33,70 Z" fill="'+c+'"/>';
+  default:    return'<path d="M28,45 C28,23 45,18 50,18 C58,18 72,24 72,45 C72,37 66,31 58,31 C54,35 44,35 40,32 C33,33 28,39 28,45 Z" fill="'+c+'"/>';}}
+function accPath(acc,bg){switch(acc){
+  case'glasses': return'<g fill="none" stroke="#2a2320" stroke-width="2.2"><rect x="35" y="42" width="12" height="9" rx="3.5"/><rect x="53" y="42" width="12" height="9" rx="3.5"/><line x1="47" y1="46" x2="53" y2="46"/></g>';
+  case'headband':return'<path d="M27,33 Q50,26 73,33 L73,38 Q50,31 27,38 Z" fill="'+bg+'"/>';
+  default:       return'';}}
+function avatarSVG(av,smile){
+  const mouth=smile===false?'<path d="M44,55 Q50,53 56,55" stroke="#7a4a35" stroke-width="2" fill="none" stroke-linecap="round"/>'
+                           :'<path d="M44,53 Q50,58 56,53" stroke="#7a4a35" stroke-width="2" fill="none" stroke-linecap="round"/>';
+  return'<svg viewBox="0 0 100 100" width="100%" height="100%">'+
+    '<circle cx="50" cy="50" r="50" fill="'+shade(av.bg,70)+'"/>'+
+    '<path d="M18,100 Q18,72 50,72 Q82,72 82,100 Z" fill="'+av.bg+'"/>'+
+    '<rect x="44" y="58" width="12" height="15" rx="5" fill="'+av.skin+'"/>'+
+    '<circle cx="50" cy="45" r="22" fill="'+av.skin+'"/>'+
+    '<circle cx="28" cy="46" r="4" fill="'+av.skin+'"/><circle cx="72" cy="46" r="4" fill="'+av.skin+'"/>'+
+    hairPath(av.style,av.hair)+
+    '<circle cx="43" cy="45" r="2.5" fill="#2a2320"/><circle cx="57" cy="45" r="2.5" fill="#2a2320"/>'+
+    '<circle cx="39" cy="50" r="3" fill="'+shade(av.skin,-18)+'" opacity=".5"/><circle cx="61" cy="50" r="3" fill="'+shade(av.skin,-18)+'" opacity=".5"/>'+
+    mouth+accPath(av.acc,av.bg)+'</svg>';
+}
+const CHARAS=[
+  {id:'jiyoung',name:'ジヨン',role:'はげます',av:{skin:'#e8b58a',hair:'#1f1a17',style:'long',acc:'headband',bg:'#f0a020'}},
+  {id:'nicole', name:'ニコル',role:'記録で示す',av:{skin:'#f6cea8',hair:'#2f2622',style:'bob',acc:'glasses',bg:'#4f6ef7'}},
+  {id:'gyuri',  name:'ギュリ',role:'びしっと言う',av:{skin:'#f4c9a6',hair:'#2f2622',style:'long',acc:'none',bg:'#e5484d'}}
+];
+function charaOf(id){return CHARAS.find(c=>c.id===id)||CHARAS[0];}
+
+const LINES={
+ hello:{
+  jiyoung:['{name}さん、はじめまして！これから毎日の学習を一緒に見ていきますね。まずは今日の分から記録してみましょう。'],
+  nicole:['{name}さん、登録おつかれさまです。記録は続けるほど、伸びが数字ではっきり見えてきます。今日から始めましょう。'],
+  gyuri:['{name}さん、よろしく。やる日もやらない日も、とにかく記録すること。それだけは守ってください。']
+ },
+ praise:{
+  jiyoung:['今日もおつかれさまでした！{min}、しっかり積み上がっていますよ。','記録できましたね。{min}、えらいです。この調子でいきましょう。'],
+  nicole:['{min}を記録しました。今月の合計は{month}です。','記録しました。{min}。数字は正直なので、積むほど効いてきます。'],
+  gyuri:['{min}ですね。悪くありません。明日も同じことをしてください。','記録しました。{min}。続けてこそ意味があります。']
+ },
+ streak:{
+  jiyoung:['{streak}日連続です！すごい。ここで途切れさせるのはもったいないですよ。'],
+  nicole:['{streak}日連続。これだけ続くと、もう習慣になりかけています。'],
+  gyuri:['{streak}日連続。ここまで来たなら、止める理由はありませんね。']
+ },
+ worry:{
+  jiyoung:['{days}日、記録が空いていますね。忙しかったですか？<br>5分でも大丈夫なので、今日から戻ってきましょう。'],
+  nicole:['最後の記録から{days}日空いています。0分の日も記録しておくと、あとで振り返るときに役立ちますよ。'],
+  gyuri:['{days}日空いています。理由は聞きません。今日の分を記録するところから戻ってください。']
+ },
+ clear:{
+  jiyoung:['今月の目標、達成しました！🎉 本当によく続けましたね。'],
+  nicole:['今月の目標時間に到達しました。計画どおりです。'],
+  gyuri:['目標達成です。よくやりました。次はもう少し上を狙いましょう。']
+ },
+ goal:{
+  jiyoung:['新しい月ですね。今月は何時間、勉強しますか？<br>決めておくと迷わなくなりますよ。'],
+  nicole:['今月の目標がまだ空欄です。目標があると、ペースの遅れに早く気づけます。'],
+  gyuri:['今月の目標がまだですね。決めないまま始めると、だいたい流れます。']
+ },
+ zero:{
+  jiyoung:['この1週間、{cat}だけ手つかずですね。少しだけでも触れておきませんか？'],
+  nicole:['直近7日、{cat}が0分です。偏りが出はじめています。'],
+  gyuri:['{cat}、1週間ゼロです。苦手だから避けていませんか。']
+ }
+};
+function charaText(kind,v){
+  const set=LINES[kind]||{};
+  const arr=set[myCharaId]||set.jiyoung||[''];
+  let s=arr[Math.floor(Math.random()*arr.length)];
+  for(const k in v)s=s.split('{'+k+'}').join(v[k]);
+  return s;
+}
+
+// どの場面を出すか決める（出さない場合は null）
+function decideChara(){
+  if(!myCharaId)return{kind:'hello',pick:true,v:{name:myName}};
   const r=daysSinceLast(myName);
-  if(!r||r.days<2)return'';
-  const p=r.last.split('-');
-  return`<div class="overlay" onclick="if(event.target===this)closeNudge()">
-    <div class="modal">
-      <div class="modal-handle"></div>
-      <div class="modal-title">⏰ ${r.days}日間、記録がありません</div>
-      <div class="modal-sub">最後の記録は ${parseInt(p[1])}月${parseInt(p[2])}日です。<br>
-        短い時間でも、記録が途切れないほうが続きます。やらなかった日は0分でもOKです。</div>
-      <div class="mactions">
-        <button class="btn-cancel" onclick="closeNudge()">あとで</button>
-        <button class="btn-save" onclick="nudgeToday()">今日の記録をつける</button>
+  if(r&&r.days>=2)return{kind:'worry',v:{days:r.days},act:'day'};
+  if(localStorage.getItem('charaSeen')===todayStr())return null;
+  const ym=ymStr(curYear,curMonth);
+  const g=getGoal(myName,curYear,curMonth);
+  const tH=Number(g.hours||0);
+  if(tH>0&&getStudentMonthTotal(myName,curYear,curMonth)>=tH*60&&localStorage.getItem('charaClear')!==ym){
+    localStorage.setItem('charaClear',ym);return{kind:'clear',v:{}};
+  }
+  if(now.getDate()<=3&&!tH)return{kind:'goal',v:{},act:'goal'};
+  const z=zeroCat(myName);
+  if(z)return{kind:'zero',v:{cat:z.label}};
+  return null;
+}
+function openChara(e){
+  if(!e)return;
+  charaEvent=e;
+  if(e.kind!=='praise'&&e.kind!=='streak')localStorage.setItem('charaSeen',todayStr());
+}
+function buildChara(){
+  if(!charaEvent||modalDay||showGoalModal||showSettings)return'';
+  const e=charaEvent;
+  const c=charaOf(e.pick?(charaPick||'jiyoung'):myCharaId);
+  const soft=e.kind==='worry'||e.kind==='zero';
+  const txt=e.pick?charaText('hello',{name:myName}):(e.text||charaText(e.kind,e.v||{}));
+  const picker=e.pick?`<div class="chara-pick">${CHARAS.map(x=>`
+      <button class="chara-opt ${(charaPick||'jiyoung')===x.id?'on':''}" onclick="pickChara('${x.id}')">
+        <div class="chara-opt-face">${avatarSVG(x.av,true)}</div>
+        <div class="chara-opt-nm">${x.name}</div><div class="chara-opt-rl">${x.role}</div>
+      </button>`).join('')}</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center">応援してくれる人を選べます（設定であとから変更できます）</div>`:'';
+  const acts=e.pick
+    ?`<div class="chara-acts"><button class="chara-main" onclick="decideCharaPick()">この人にする</button></div>`
+    :e.act==='day'
+      ?`<div class="chara-acts"><button class="chara-sub" onclick="closeChara()">あとで</button><button class="chara-main" onclick="charaGoDay()">今日の記録をつける</button></div>`
+      :e.act==='goal'
+        ?`<div class="chara-acts"><button class="chara-sub" onclick="closeChara()">あとで</button><button class="chara-main" onclick="charaGoGoal()">目標を決める</button></div>`
+        :`<div class="chara-acts"><button class="chara-main" onclick="closeChara()">わかりました</button></div>`;
+  return`<div class="chara-ov" onclick="if(event.target===this)closeChara()">
+    <div class="chara-card">
+      <div class="chara-row">
+        <div class="chara-face">${avatarSVG(c.av,!soft)}</div>
+        <div class="chara-body">
+          <div class="chara-name">${c.name}</div>
+          <div class="chara-bubble">${txt}</div>
+        </div>
       </div>
+      ${picker}${acts}
     </div>
   </div>`;
 }
-function closeNudge(){nudgeSeen=true;render();}
-function nudgeToday(){nudgeSeen=true;openDay(todayStr());}
+function closeChara(){charaEvent=null;render();}
+function charaGoDay(){charaEvent=null;openDay(todayStr());}
+function charaGoGoal(){charaEvent=null;openGoalModal();}
+function pickChara(id){charaPick=id;render();}
+async function decideCharaPick(){
+  myCharaId=charaPick||'jiyoung';
+  try{await db().set(`students/${myName}/chara`,myCharaId);}catch(e){}
+  if(roster[myName])roster[myName].chara=myCharaId;
+  charaEvent=null;render();
+}
+async function changeChara(id){
+  myCharaId=id;
+  try{await db().set(`students/${myName}/chara`,id);}catch(e){}
+  if(roster[myName])roster[myName].chara=id;
+  render();
+}
 
 function buildSettingsModal(){
   return`<div class="overlay" onclick="if(event.target===this)closeSettings()">
@@ -566,6 +759,15 @@ function buildSettingsModal(){
         <button class="btn-cancel" onclick="closeSettings()">キャンセル</button>
         <button class="btn-save" onclick="doChangePw()">変更する</button>
       </div>
+
+      <div class="gdiv"></div>
+
+      <div class="glbl">応援してくれる人</div>
+      <div class="chara-pick">${CHARAS.map(x=>`
+        <button class="chara-opt ${myCharaId===x.id?'on':''}" onclick="changeChara('${x.id}')">
+          <div class="chara-opt-face">${avatarSVG(x.av,true)}</div>
+          <div class="chara-opt-nm">${x.name}</div><div class="chara-opt-rl">${x.role}</div>
+        </button>`).join('')}</div>
 
       <div class="gdiv"></div>
 
@@ -806,6 +1008,63 @@ async function doCoachLogin(){
   page='coach';render();
 }
 
+// ── コーチ：要フォローの抽出 ──────────────────────────────
+function weekTotal(name,offset){
+  let t=0;const d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  d.setDate(d.getDate()-offset*7);
+  for(let i=0;i<7;i++){
+    const k=`${name}/${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const v=allData[k]||{};for(const c of CATS)t+=Number(v[c.key]||0);
+    d.setDate(d.getDate()-1);
+  }
+  return t;
+}
+function followList(){
+  const out=[];
+  for(const n of allStudents()){
+    const r=daysSinceLast(n);
+    if(!r){out.push({n:n,lv:2,tag:'記録なし',msg:'まだ一度も記録がありません',
+      line:`${n}さん、こんにちは。アプリの学習記録がまだ入っていないようです。使い方で困っているところがあれば遠慮なく教えてください。`});continue;}
+    if(r.days>=3){out.push({n:n,lv:3,tag:r.days+'日未入力',msg:`最後の記録から${r.days}日空いています`,
+      line:`${n}さん、おつかれさまです。${r.days}日ほど記録が空いているようですが、忙しかったですか？5分でも大丈夫なので、また今日から記録を再開していきましょう。`});continue;}
+    const tw=weekTotal(n,0),lw=weekTotal(n,1);
+    if(lw>=60&&tw<lw*0.4){out.push({n:n,lv:2,tag:'失速',msg:`今週${fmtMin(tw)}（先週${fmtMin(lw)}）`,
+      line:`${n}さん、おつかれさまです。今週は${fmtMin(tw)}と、先週の${fmtMin(lw)}から少しペースが落ちているようです。何か詰まっているところがあれば聞かせてください。`});continue;}
+    const g=getGoal(n,coachYear,coachMonth),tH=Number(g.hours||0);
+    if(tH>0){
+      const days=getDays(coachYear,coachMonth);
+      const passed=(coachYear===now.getFullYear()&&coachMonth===now.getMonth())?now.getDate():days;
+      const should=tH*60*passed/days,got=getStudentMonthTotal(n,coachYear,coachMonth);
+      if(should>0&&got<should*0.7){
+        const need=Math.max(0,Math.round((tH*60-got)/Math.max(1,days-passed)));
+        out.push({n:n,lv:1,tag:'ペース遅れ',msg:`目標${tH}hに対し${fmtMin(got)}（${Math.round(got/should*100)}%ペース）`,
+          line:`${n}さん、おつかれさまです。今月の目標${tH}時間に対して現在${fmtMin(got)}です。残りの日数だと1日あたり${need}分ペースになります。無理そうなら目標のほうを見直しましょう。`});
+      }
+    }
+  }
+  return out.sort((a,b)=>b.lv-a.lv);
+}
+function buildFollowPanel(){
+  followCache=followList();
+  const rows=followCache.length
+    ? followCache.map((f,i)=>`<div class="fw-item">
+        <span class="fw-tag ${f.lv>=3?'fw-red':'fw-amb'}">${f.tag}</span>
+        <span class="fw-nm">${f.n}</span>
+        <span class="fw-msg">${f.msg}</span>
+        <button class="fw-copy" onclick="copyFollow(${i})">文面</button>
+      </div>`).join('')
+    : `<div class="fw-none">いま声をかけたほうがよい生徒はいません 👍</div>`;
+  return`<div class="fw-box">
+    <div class="fw-head">🔔 要フォロー ${followCache.length?`（${followCache.length}名）`:''}</div>
+    ${rows}
+  </div>`;
+}
+async function copyFollow(i){
+  const f=followCache[i];if(!f)return;
+  try{await navigator.clipboard.writeText(f.line);alert('声かけの文面をコピーしました。\n\n'+f.line);}
+  catch(e){prompt('この文面をコピーしてください',f.line);}
+}
+
 // ── 旧方式からの移行（コーチ画面） ─────────────────────────
 function buildMigratePanel(){
   const pending=allStudents().filter(n=>roster[n]&&roster[n].legacyPw);
@@ -876,6 +1135,7 @@ function buildCoach(){
       <button class="icon-btn" onclick="doLogout()">ログアウト</button>
     </div>
     ${buildMigratePanel()}
+    ${buildFollowPanel()}
     <div class="mnav-row">
       <button class="mnav-btn" onclick="coachPrev()">◀</button>
       <span class="mnav-title">${coachYear}年 ${MN[coachMonth]}</span>
@@ -989,9 +1249,16 @@ function backToCoach(){page='coach';render();}
 
 async function doSaveDay(){
   document.getElementById('saveBtn').disabled=true;
-  const data={};
-  for(const c of CATS)data[c.key]=Number(document.getElementById('inp_'+c.key)?.value||0);
-  await saveStudyDay(myName,modalDay,data);modalDay=null;render();
+  const data={};let t=0;
+  for(const c of CATS){const v=Number(document.getElementById('inp_'+c.key)?.value||0);data[c.key]=v;t+=v;}
+  await saveStudyDay(myName,modalDay,data);
+  modalDay=null;
+  if(t>0&&myCharaId){
+    const s=streakDays(myName);
+    if(s>=3&&Math.random()<0.7)openChara({kind:'streak',v:{streak:s}});
+    else openChara({kind:'praise',v:{min:fmtMin(t),month:fmtMin(getStudentMonthTotal(myName,curYear,curMonth))}});
+  }
+  render();
 }
 async function doDeleteDay(){await deleteStudyDay(myName,modalDay);modalDay=null;render();}
 async function doSaveGoal(){
